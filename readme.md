@@ -9,14 +9,13 @@ The aim of this project, is to build your perfect media server setup with end-to
 
 ### Current Scripts:
 
-| Script                                  | Language    | Targets   | Description                            |
-| --------------------------------------- | ----------- | --------- | ---------------------------------------|
-| radarr_rename-movie-files.sh            | Bash        | Radarr    | Quick and dirty script to hit the Radarr API and rename any movies (via the Radar API) so that they are correctly indexed in Plex
-| radarr_search-missing-movies.sh         | Bash        | Radarr    | Script that hits the Radarr API to search for any missing movies (Ideally this should be scheduled with your CRON and run each night)
-| radarr_cleanup-crappy-movies.sh.        | Bash        | Radarr    | I stupidly added in a list to Radarr that imported thousands of low ranking movies that I didn't want .... This is a quick and dirty script to find those movies on the NAS and blow them away if not yet downloaded
-| radarr_remove-undownloaded-movies.sh    | Bash        | Radarr    | I love my lists - but I don't like searching for movies older than year 1992 - Script finds any undownloaded movies (auto populated from a list) and removes them
-
-
+| Script                                                                               | Language    | Targets          | Description                                                                                                                                                                                                                                  |
+| ------------------------------------------------------------------------------------ | ----------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [radarr_rename-movie-files.sh](scripts/radarr/radarr_rename-movie-files.sh)                 | Bash        | Radarr (API)     | Quick and dirty script to hit the Radarr API and rename any movies (via the Radar API) so that they are correctly indexed in Plex
+| [radarr_search-missing-movies.sh](scripts/radarr/radarr_search-missing-movies.sh)           | Bash        | Radarr (API)     | Script that hits the Radarr API to search for any missing movies (Ideally this should be scheduled with your CRON and run each night)
+| [radarr_cleanup-crappy-movies.sh](scripts/radarr/radarr_cleanup-crappy-movies.sh)           | Bash        | Radarr (API)     | I stupidly added in a list to Radarr that imported thousands of low ranking movies that I didn't want .... This is a quick and dirty script to find those movies on the NAS and blow them away if not yet downloaded
+| [radarr_remove-undownloaded-movies.sh](scripts/radarr/radarr_remove-undownloaded-movies.sh) | Bash        | Radarr (API)     | I love my lists - but I don't like searching for movies older than year 1992 - Script finds any undownloaded movies (auto populated from a list) and removes them
+| [radarr_remove-undownloaded-movies.sh](scripts/radarr/radarr_remove-undownloaded-movies.sh) | Javascript  | Radarr (Browser) | I love my lists - but I don't like searching for movies older than year 1992 - Script finds any undownloaded movies (auto populated from a list) and removes them
 
 ### The Perfect PMS Setup:
 In addition to these scripts to better manage your media, you should consider the following - _(All these programs are designed to run in the browser - you don't need a GUI on your server)_:
