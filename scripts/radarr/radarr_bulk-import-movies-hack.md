@@ -1,6 +1,6 @@
 # Bulk import movies into Radarr for the lazy-man.
 
-I wrote this quickly in response to issue: Radarr/Radarr#2273
+I wrote this quickly in response to issue: [Radarr/#2273](https://github.com/Radarr/Radarr/issues/2273)
 
 If you're like me and trying to import thousands of pre-downloaded movies (around 4,000+ movies) into Radarr, you're not going to want to click through the web-ui manually and add them all...
 
@@ -33,4 +33,5 @@ setInterval(addMovies, 1000 * 30)
 -----------------------------------------------------------------------
 
 Screenshot:
+
 ![Alt text](../screenshots/radarr_bulk-import-movies-hack.gif?raw=true)
