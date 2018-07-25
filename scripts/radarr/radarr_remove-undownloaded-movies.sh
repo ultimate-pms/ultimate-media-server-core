@@ -69,7 +69,7 @@ for row in $(echo "${TOTALITEMS}" | jq -r '.[] | @base64'); do
                 -H "Content-Type: application/json" \
                 --data "content=success" \
                 -H "X-Api-Key: $RADARR_API_KEY" \
-                -X DELETE http://$RADARR_HOST:$RADARR_PORT/api/movie/$ID
+                -X DELETE http://$RADARR_HOST:$RADARR_PORT/api/movie/$ID$DELETE_FLAGS
         fi
     fi
 done
