@@ -18,6 +18,7 @@ The aim of this project, is to build your perfect media server setup with end-to
 | [radarr_cleanup-crappy-movies.sh](scripts/radarr/radarr_cleanup-crappy-movies.sh)           | Bash        | Radarr (API)     | I stupidly added in a list to Radarr that imported thousands of low ranking movies that I didn't want .... This is a quick and dirty script to find those movies on the NAS and blow them away if not yet downloaded
 | [radarr_remove-undownloaded-movies.sh](scripts/radarr/radarr_remove-undownloaded-movies.sh) | Bash        | Radarr (API)     | I love my lists - but I don't like searching for movies older than year 1992 - Script finds any undownloaded movies (auto populated from a list) and removes them
 | [radarr_bulk-import-movies-hack.md](scripts/radarr/radarr_bulk-import-movies-hack.md)       | Javascript  | Radarr (Browser) | If you're like me and trying to import thousands of pre-downloaded movies (around 4,000+ movies) into Radarr, you're not going to want to click through the web-ui manually and add them all...
+| [fake-video-detector](scripts/plex/fake-video-detector/)                                    | Mixed       | CLI              | Automatically detect fake videos in your library based upon a 'database' of blacklisted videos
 
 Here's a copy of my current configuration -- update paths accordingly:
 

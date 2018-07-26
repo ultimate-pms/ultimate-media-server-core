@@ -1,0 +1,3 @@
+[submodule "scripts/plex/fake-video-detector"]
+	path = scripts/plex/fake-video-detector
+	url = https://github.com/ultimate-pms/fake-video-detector
