@@ -32,6 +32,13 @@ Here's a copy of my current configuration -- update paths accordingly:
 0 3 * * * /opt/scripts/_radarr/radarr_search-missing-movies.sh
 ```
 
+### Dockerfiles:
+
+| Script                                                          | Language    | Targets          | Description                                                                                                                                                                                                                                  |
+| ----------------------------------------------------------------| ----------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [plex2netflix](dockerfiles/plex2netflix)                        | Nodejs      | Plex (API)       | Dockerised version of the p[lex2netflix](https://github.com/SpaceK33z/plex2netflix) NPM which checks how much of your content is on Netflix
+
+
 ### The Perfect PMS Setup:
 In addition to these scripts to better manage your media, you should consider the following - _(All these programs are designed to run in the browser - you don't need a GUI on your server)_:
 

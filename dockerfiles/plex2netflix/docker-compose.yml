@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+  plex2netflix:
+    build: .
+    container_name: plex2netflix
+    network_mode: host
+    command: plex2netflix --token=xxxxxxxxxxxx --country=us --host=127.0.0.1 --port=32400 --section=Movies
