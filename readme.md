@@ -7,6 +7,12 @@ The aim of this project, is to build your perfect media server setup with end-to
 
 --------------------------------------------
 
+### Cloning Repo:
+
+The project uses Git Submodules, make sure you clone the repo using:
+`git clone --recurse-submodules https://github.com/ultimate-pms/ultimate-plex-setup.git`
+
+
 ### Current Scripts:
 
 *NB:* Some of these Scripts you may want to run once off, others you may wish to schedule in a cron.
