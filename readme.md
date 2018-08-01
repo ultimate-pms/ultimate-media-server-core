@@ -10,7 +10,7 @@ The aim of this project, is to build your perfect media server setup with end-to
 ### Cloning Repo:
 
 The project uses Git Submodules, make sure you clone the repo using:
-`git clone --recurse-submodules https://github.com/ultimate-pms/ultimate-plex-setup.git`
+`git clone --recurse-submodules https://github.com/ultimate-pms/ultimate-plex-setup.git /opt/pms-scripts`
 
 
 ### Current Scripts:
@@ -23,20 +23,25 @@ The project uses Git Submodules, make sure you clone the repo using:
 | [radarr_search-missing-movies.sh](scripts/radarr/radarr_search-missing-movies.sh)           | Bash        | Radarr (API)     | Script that hits the Radarr API to search for any missing movies (Ideally this should be scheduled with your CRON and run each night)
 | [radarr_search-missing-movies-by-year](scripts/radarr/radarr_search-missing-movies-by-year.sh) | Bash     | Radarr (API)     | Same as previous script, but only searches missing movies that match a specific year (i.e. Only search missing movies from 2016)
 | [radarr_cleanup-crappy-movies.sh](scripts/radarr/radarr_cleanup-crappy-movies.sh)           | Bash        | Radarr (API)     | I stupidly added in a list to Radarr that imported thousands of low ranking movies that I didn't want .... This is a quick and dirty script to find those movies on the NAS and blow them away if not yet downloaded
-| [radarr_remove-undownloaded-movies.sh](scripts/radarr/radarr_remove-undownloaded-movies.sh) | Bash        | Radarr (API)     | I love my lists - but I don't like searching for movies older than year 1992 - Script finds any undownloaded movies (auto populated from a list) and removes them
+| [radarr_remove-undownloaded-movies.sh](scripts/radarr/radarr_remove-undownloaded-movies.sh) | Bash        | Radarr (API)     | I love my lists - but I don't like searching for movies older than year 1992 - Script finds any un-downloaded movies (auto populated from a list) and removes them
 | [radarr_bulk-import-movies-hack.md](scripts/radarr/radarr_bulk-import-movies-hack.md)       | Javascript  | Radarr (Browser) | If you're like me and trying to import thousands of pre-downloaded movies (around 4,000+ movies) into Radarr, you're not going to want to click through the web-ui manually and add them all...
 | [fake-video-detector](https://github.com/ultimate-pms/fake-video-detector)                  | Mixed       | CLI              | Automatically detect fake videos in your library based upon a 'database' of blacklisted videos
+| [remove-completed-downloads](scripts/qbittorrent/qb_remove-completed-downloads.sh)          | Bash        | qBitTorrent      | qBitTorrent script to automatically remove any completed downloads from matching category (tv|movies) after X hours (The idea behind this is to allow Radarr/Sonar to copy & rename files, then this script will come and remove them after X hours so they still have time to seed.)
 
 Here's a copy of my current configuration -- update paths accordingly:
 
 ```
-### Various cron jobs to make Plex better...
+### Various cron jobs to make Plex Life easier ...
 
 # Remove any old, un-downloaded movies before triggering search-all...
-45 2 * * * /opt/scripts/_radarr/radarr_remove-undownloaded-movies.sh
+45 2 * * * /opt/pms-scripts/scripts/radarr/radarr_remove-undownloaded-movies.sh
 
 # Trigger nightly 'Search all' in sonarr for any missing series/episodes...
-0 3 * * * /opt/scripts/_radarr/radarr_search-missing-movies.sh
+0 3 * * * /opt/pms-scripts/scripts/radarr/radarr_search-missing-movies.sh
+
+# Cleanup any completed torrents that have been post processed and are just left seeding...
+20 * * * * /opt/pms-scripts/scripts/qbittorrent/qb_remove-completed-downloads.sh
+
 ```
 
 ### Dockerfiles:
@@ -49,6 +54,7 @@ Here's a copy of my current configuration -- update paths accordingly:
 ### The Perfect PMS Setup:
 In addition to these scripts to better manage your media, you should consider the following - _(All these programs are designed to run in the browser - you don't need a GUI on your server)_:
 
+- [PLEX!](https://plex.tv/) - If you don't know what Plex is, you should start here - Plex is the ultimate Media Server, with apps for iOS, Android, numerous smart TV's and all the rest - It's truly a one-stop media shop.
 - [Sonarr](https://sonarr.tv/) - Automatically grabs your favourite TV shows, sends them to your download client & organises the files.
 - [Radarr](https://radarr.video/) - A fork of Sonarr, but for Movies.
 - [qBittorrent](https://www.qbittorrent.org/)  - Reliable, lightweight linux torrent client
