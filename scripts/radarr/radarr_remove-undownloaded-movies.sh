@@ -2,6 +2,9 @@
 #
 # I love my lists - but I don't like searching for movies older than year 2000 - Generally anything older than this I've already got :)
 # This is a quick script to go and blow away any movies that have been added into Radarr each night (via a List) and remove them if they have not yet been downloaded...
+# 
+# Author: David Nedved
+# https://github.com/david-nedved/ultimate-plex-setup/
 #
 ################################################################################################
 

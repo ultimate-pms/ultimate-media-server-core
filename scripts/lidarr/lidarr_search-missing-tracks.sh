@@ -2,6 +2,9 @@
 #
 # Quick script to hit the Lidarr API and search for any tracks that are missing (and on your wanted list) in Lidarr...
 # Suggest running this script on a cron each night.
+# 
+# Author: David Nedved
+# https://github.com/david-nedved/ultimate-plex-setup/
 #
 ################################################################################################
 

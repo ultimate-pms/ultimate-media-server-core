@@ -8,6 +8,9 @@
 # NB:   Metadata is also deleted "as people often embed funky metadata in the file names etc" which fixes movies
 #       from showing up funny in the plex library - This assumes that the files have already been renamed 'cleanly'
 #       using a tool like Radarr, or Filebot etc.
+# 
+# Author: David Nedved
+# https://github.com/david-nedved/ultimate-plex-setup/
 #
 ################################################################################################
 

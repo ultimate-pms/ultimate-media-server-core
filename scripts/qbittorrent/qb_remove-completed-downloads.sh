@@ -3,6 +3,9 @@
 # qBitTorrent script to automatically remove any completed downloads from matching category (tv|movies) after X hours.
 # (The idea behind this is to allow Radarr/Sonar to copy & rename files, then this script will come and remove them after X hours so they still have time to seed.)
 #
+# Author: David Nedved
+# https://github.com/david-nedved/ultimate-plex-setup/
+#
 #########################################################################################################
 
 QBITTORRENT_HOSTNAME="localhost:8080"

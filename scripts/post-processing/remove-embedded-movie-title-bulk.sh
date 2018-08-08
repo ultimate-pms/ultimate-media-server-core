@@ -2,6 +2,10 @@
 #
 # An easy way to find all existing videos that have been downloaded and run them through any post processing scripts
 # This is intended to be run just once when setting up your scripts etc...
+# 
+# Author: David Nedved
+# https://github.com/david-nedved/ultimate-plex-setup/
+#
 ################################################################################################
 
 # Adjust as needed.

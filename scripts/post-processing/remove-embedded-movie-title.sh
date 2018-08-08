@@ -2,7 +2,10 @@
 
 # This is a simple script using AtomicParsley to check MP4 files for embedded
 # filenames and remove them if they are found, so Plex displays pretty / "clean" file names :)
-
+# 
+# Author: David Nedved
+# https://github.com/david-nedved/ultimate-plex-setup/
+#
 
 atomicParsleyInstalled() {
     if ! [ -x "$(command -v AtomicParsley)" ]; then
