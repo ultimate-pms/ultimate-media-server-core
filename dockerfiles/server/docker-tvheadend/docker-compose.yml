@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  tvheadend:
+
+    image: linuxserver/tvheadend
+    container_name: tvheadend
+    privileged: true
+    restart: always
+    network_mode: host
+
+    cpu_shares: 1536
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /opt/docker-tvheadend/config:/config
+
+    environment:
+      - PGID=0
+      - PUID=0

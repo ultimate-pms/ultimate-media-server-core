@@ -1,0 +1,30 @@
+version: '2'
+# Docker Plex Media Server Configuration File
+
+services:
+  plex:
+
+    image: plexinc/pms-docker
+    container_name: plex
+    privileged: true
+    restart: always
+    network_mode: host
+
+    volumes:
+      - /opt/docker-plex/config:/config
+      - /opt/docker-plex/transcode-tmp:/transcode
+
+      # Map in the volume(s) where your media resides below...
+      - /nas:/nas
+
+    environment:
+      - TZ=Australia/Brisbane
+      - PLEX_UID=0
+      - PLEX_GID=0
+      # Update to match your network address
+      - ALLOWED_NETWORKS=192.168.0.0/16
+      - CHANGE_CONFIG_DIR_OWNERSHIP=false
+      - DEBUG=false
+
+    # See: https://docs.docker.com/engine/reference/run/#cpu-share-constraint
+    cpu_shares: 2048

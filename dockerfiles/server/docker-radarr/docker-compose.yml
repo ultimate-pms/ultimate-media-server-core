@@ -1,0 +1,33 @@
+version: '2'
+# Docker Radarr Compose File
+
+services:
+  radarr:
+
+    #image: linuxserver/radarr
+    build: .
+
+    container_name: radarr
+    privileged: true
+    restart: always
+    ports:
+      - 7878:7878
+
+    volumes:
+      - /opt/docker-radarr/config:/config
+      - /etc/localtime:/etc/localtime:ro
+
+      # These are mapped in for post-processing scripts - Remove them if you do not play on any post-processing
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/docker-radarr/pp-scripts:/opt/pp-scripts
+
+      # Map in your Media Shares Below...
+      - /nas:/nas
+
+    environment:
+      - TZ=Australia/Brisbane
+      - PGID=0
+      - PUID=0
+
+    # See: https://docs.docker.com/engine/reference/run/#cpu-share-constraint
+    cpu_shares: 256

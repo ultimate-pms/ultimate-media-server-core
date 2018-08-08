@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+  openspeedtest:
+
+    image: mlabbe/openspeedtest
+    container_name: openspeedtest
+    privileged: false
+    restart: always
+    ports:
+      - 8081:8080
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro

@@ -1,0 +1,27 @@
+version: '2'
+# Docker Sonarr Compose File
+
+services:
+  sonarr:
+
+    image: linuxserver/sonarr
+    container_name: sonarr
+    privileged: true
+    restart: always
+    ports:
+      - 8988:8989
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /opt/docker-sonarr/config:/config
+
+      # Map in your Media Shares & Download Client's Share(s)...
+      - /nas:/nas
+
+    environment:
+      - TZ=Australia/Brisbane
+      - PGID=0
+      - PUID=0
+
+    # See: https://docs.docker.com/engine/reference/run/#cpu-share-constraint
+    cpu_shares: 512

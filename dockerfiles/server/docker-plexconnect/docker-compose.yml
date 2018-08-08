@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  plexconnect:
+    build: .
+    container_name: plexconnect
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+      - 53:53/udp
+    volumes:
+      - /opt/docker-plexconnect/data:/plexconnect
+    network_mode: host
+    environment:
+      # Update to the IP of your PMS Host
+      - PLEXCONNECT_IP_PMS=127.0.0.1
+      - PLEXCONNECT_IP_DNSMASTER=1.1.1.1
+      - PLEXCONNECT_PREVENT_ATV_UPDATE=true
+      - PLEXCONNECT_HOSTTOINTERCEPT=trailers.apple.com

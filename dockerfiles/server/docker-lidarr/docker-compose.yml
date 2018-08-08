@@ -1,0 +1,27 @@
+version: '2'
+# Docker Lidarr Music Downloader Compose File
+
+services:
+  lidarr:
+
+    image: linuxserver/lidarr
+    container_name: lidarr
+    privileged: true
+    restart: always
+    ports:
+      - 8686:8686
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /opt/docker-lidarr/config:/config
+
+      # Configure any other volmes/shares you want to map in...
+      - /nas:/nas
+
+    environment:
+      - TZ=Australia/Brisbane
+      - PGID=0
+      - PUID=0
+
+    # See: https://docs.docker.com/engine/reference/run/#cpu-share-constraint
+    cpu_shares: 512

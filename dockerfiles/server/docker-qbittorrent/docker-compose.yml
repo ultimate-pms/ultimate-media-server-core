@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+  qbittorrent:
+    image: linuxserver/qbittorrent
+    privileged: true
+    container_name: qbittorrent
+    restart: always
+
+    ports:
+      - 8080:8080
+      - 18999:18999/udp
+      - 18999:18999
+
+    volumes:
+      - /opt/docker-qbittorrent/config:/config
+
+      # Map in the volumes where you would like to save your torrent files...
+      - /nas:/nas
+
+    environment:
+      - TZ=Australia/Brisbane
+      - WEBUI_PORT=8080
+      - PUID=0
+      - PGID=0
+      - UMASK_SET=022

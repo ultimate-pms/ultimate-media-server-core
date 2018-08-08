@@ -1,0 +1,23 @@
+version: '2'
+# Docker Tautulli Compose File
+
+services:
+  tautulli:
+
+    image: tautulli/tautulli
+    container_name: tautulli
+    privileged: true
+    restart: always
+
+    ports:
+      - 8181:8181
+
+    volumes:
+      - /opt/docker-tautulli/config:/config
+      # Update to the location of your PMS Logs directory
+      - "/opt/docker-plex/config/Library/Application Support/Plex Media Server/Logs:/logs:ro"
+
+    environment:
+      - TZ=Australia/Brisbane
+      - PGID=0
+      - PUID=0
