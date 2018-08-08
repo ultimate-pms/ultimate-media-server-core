@@ -3,8 +3,8 @@
 # Quick and nasty script to hit the Last.fm API and add in the top artists (by genre) to Lidarr.
 # Suggest you start with some realistic (low) values when adding for the first time so you don't get banned by Last.FM and your Trackers...
 # 
-# Author: David Nedved
-# https://github.com/david-nedved/ultimate-plex-setup/
+# Author: DN
+# https://github.com/ultimate-pms/ultimate-plex-setup
 #
 ################################################################################################
 

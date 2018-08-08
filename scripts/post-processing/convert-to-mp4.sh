@@ -9,8 +9,8 @@
 #       from showing up funny in the plex library - This assumes that the files have already been renamed 'cleanly'
 #       using a tool like Radarr, or Filebot etc.
 # 
-# Author: David Nedved
-# https://github.com/david-nedved/ultimate-plex-setup/
+# Author: DN
+# https://github.com/ultimate-pms/ultimate-plex-setup
 #
 ################################################################################################
 

@@ -3,8 +3,8 @@
 # I stupidly added in a list to Radarr that imported thousands of low ranking movies that I didn't want ....
 # This is a quick and dirty script to find those movies on the NAS (volume #6) and blow them away if they have not yet been downloaded ...
 # 
-# Author: David Nedved
-# https://github.com/david-nedved/ultimate-plex-setup/
+# Author: DN
+# https://github.com/ultimate-pms/ultimate-plex-setup
 #
 ################################################################################################
 
