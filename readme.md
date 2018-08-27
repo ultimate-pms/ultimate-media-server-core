@@ -85,6 +85,7 @@ Useful URLs:
 | [remove-embedded-mobie-titles](scripts/post-processing/remove-embedded-movie-titles.sh)     | Bash        | N/A              | Post processing script that goes and strips any Metadata titles out of your video file names - This is great if your TV/Movie organizer (Radarr/Sonarr etc) is setup to rename your files as Plex will use the file name to sort Movie/TV not title that is in the file's metadata.
 | [lidarr_search-missing-tracks](scripts/lidarr/lidarr_search-missing-tracks.sh)              | Bash        | Lidarr (API)     | Script to go and hit the Lidarr API (suggest scheduling via a cron each night) to "force search" for any missing tracks against your indexers...
 | [lidarr_last-fm-adder](scripts/lidarr/lidarr_last-fm-adder.sh)                              | Bash        | Lidarr (API)     | Script to query the last.fm API and return new artists to add into your Lidarr search Library...
+| [lidarr_refresh-filesystem](scripts/lidarr/lidarr_refresh-filesystem.sh)                    | Bash        | Lidarr (API)     | Iterates through each and every one of your Lidarr artists and triggers a refresh of files on on your filesystem (Useful if you add/update your music library outside of Lidarr so that Lidarr is kept in-sync with new music added)
 
 Here's a copy of my current cron jobs -- update paths accordingly:
 
