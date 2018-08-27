@@ -8,16 +8,26 @@ If you're new to this, you should clone down the repo, and start by standing up 
 
 ### My _almost_ perfect media server setup consists of:
 
+#### Media Servers
 - [PLEX!](https://plex.tv/) - If you don't know what Plex is, you should start here - Plex is the ultimate Media Server, with apps for iOS, Android, numerous smart TV's and all the rest - It's truly a one-stop media shop.
+- [Funkwhale](https://funkwhale.audio/) - Your own personal self hosted music server (Think of this as self hosting Spotify or Apple Music!)
+- [TvHeadend](https://tvheadend.org/) - Plex is actually configured to talk to this - It's a server to pull in your favorite IPTV or Over-the-air TV Channels (if you have a hardware TV Tuner/Card), Now you can finally cut the cord!
+
+#### Download Automation
 - [Sonarr](https://sonarr.tv/) - Automatically grabs your favourite TV shows, sends them to your download client & organises the files.
 - [Radarr](https://radarr.video/) - A fork of Sonarr, but for Movies.
 - [Lidarr](https://lidarr.audio/) - A fork of Sonarr, but for all your favorite music - Great for pulling in AAC/FLAC tracks that you can't get on Spotify if you're an Audiophile.
-- [qBittorrent](https://www.qbittorrent.org/)  - Reliable, lightweight linux torrent client
 - [Jackett](https://github.com/Jackett/Jackett) - API integration of all of the most popular Torrent Trackers for Sonarr/Radarr.
+- [qBittorrent](https://www.qbittorrent.org/)  - Reliable, lightweight linux torrent client
+
+#### Tools & Scripts
 - [Tautulli](https://tautulli.com/) - A monitoring and tracking tool for Plex (Think of this as Google Analytics for Plex)
 - [PlexConnect](https://github.com/iBaa/PlexConnect) - Hijacks the trailers app on your AppleTV 2/3 (and replaces it with Plex) 
 - [Ombi](https://ombi.io/) - Great way for your friends/family to request (and automate) adding new content to your Plex Server
 - [Openspeedtest](http://openspeedtest.com/) - Handy to have to test the upload/download speed for your friends/family streaming from you.
+- [Beets](http://beets.io/) - This is an essential tool for managing your MP3 library / cleaning up ID3 tags, pulling in Cover Art & Lyrics etc...
+- [tvhProxy](https://github.com/jkaberg/tvhProxy) - This is how you can seamlessly connect TvHeadend into Plex
+- [WebGrab+Plus](http://www.webgrabplus.com/) - This is how you pull in all the EPG (TV Guides) from various sites to Plex without having to use a paid metadata TV Guide service...
 
 So without further mention, let's dive in and get the thing up and running!
 (Docker-compose files are based upon the components mentioned above)
