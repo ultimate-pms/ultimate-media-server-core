@@ -9,7 +9,7 @@
 
 IDENTIFIER=`echo "$BASHPID.import"`
 FUNKWHALE_PATH_SEARCH="- /srv/funkwhale/data/music/"
-FUNKWHALE_PATH_REPLACE="/nas/bay-1/Music/"
+FUNKWHALE_PATH_REPLACE="/nas/bay-1/Music/" ## REPLACE WITH THE ACTUAL PATH TO YOUR MP3 FILES
 
 # I'm using funkwhale via docker, you will need to adapt this if you're not using funkwhale in docker..
 (cd /opt/docker-funkwhale/; docker-compose run --name="$IDENTIFIER" api python manage.py import_files "/srv/funkwhale/data/music/**/*.mp3" --recursive --noinput --in-place)
