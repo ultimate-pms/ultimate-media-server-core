@@ -25,7 +25,7 @@ services:
       - /nas:/nas
 
     environment:
-      - TZ=Australia/Brisbane
+      - TZ=UTC
       - PGID=0
       - PUID=0
 

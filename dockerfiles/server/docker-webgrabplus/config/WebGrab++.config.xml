@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<settings>
+
+    <!-- for detailed info about the settings see http://webgrabplus.com/documentation/configuration/webgrabconfigxml -->
+
+    <filename>guide.xml</filename>
+    <mode></mode>
+    <postprocess grab="y" run="n">mdb</postprocess>
+    <user-agent>Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0</user-agent>
+    <logging>on</logging>
+    <retry time-out="10">6</retry>
+    <timespan>0</timespan>
+    <update>f</update>
+
+    <!-- THIS IS AN EXAMPLE, REPLACE WITH REAL CHANELS YOU WISH TO PULL IN -->
+    <channel site="horizon.tv" site_id="CH/deu_256616999376__https://wp7-images-ch-dynamic.horizon.tv/channellogos/02/russia_today.png" update="i" xmltv_id="Russia Today">Russia Today</channel>
+
+</settings>

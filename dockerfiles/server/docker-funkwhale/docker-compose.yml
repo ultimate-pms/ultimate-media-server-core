@@ -1,0 +1,77 @@
+version: '3'
+
+services:
+
+  postgres:
+    restart: unless-stopped
+    env_file: .env
+    image: postgres:9.4
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+
+  redis:
+    restart: unless-stopped
+    env_file: .env
+    image: redis:3
+    ports:
+      - 6379:6379
+    volumes:
+      - ./data/redis:/data
+
+  celeryworker:
+    restart: unless-stopped
+    image: funkwhale/funkwhale:${FUNKWHALE_VERSION:-latest}
+    env_file: .env
+    command: celery -A funkwhale_api.taskapp worker -l INFO
+    links:
+      - postgres
+      - redis
+    environment:
+      - C_FORCE_ROOT=true
+    volumes:
+      - "/opt/docker-funkwhale/mediaroot:/srv/funkwhale/data/music:ro"
+      - "/opt/docker-funkwhale/mediaroot:/music:ro"
+      - "./data/mediaroot:/srv/funkwhale/data/media"
+
+  celerybeat:
+    restart: unless-stopped
+    image: funkwhale/funkwhale:${FUNKWHALE_VERSION:-latest}
+    env_file: .env
+    command: celery -A funkwhale_api.taskapp beat -l INFO
+    links:
+      - postgres
+      - redis
+
+  api:
+    restart: unless-stopped
+    image: funkwhale/funkwhale:${FUNKWHALE_VERSION:-latest}
+    env_file: .env
+    volumes:
+      - "/opt/docker-funkwhale/mediaroot:/srv/funkwhale/data/music:ro"
+      - "/opt/docker-funkwhale/mediaroot:/music:ro"
+      - "./data/mediaroot:/srv/funkwhale/data/media"
+      - "/opt/docker-funkwhale/data/django-static:${STATIC_ROOT}"
+      - ./front/dist:/frontend
+    ports:
+      - "${FUNKWHALE_API_IP:-127.0.0.1}:${FUNKWHALE_API_PORT:-5000}:5000"
+    links:
+      - postgres
+      - redis
+
+  # If you want to have the nginx proxy managed by docker for some reason
+  # (i.e. if you use apache as a proxy on your host),
+  # you can uncomment the following lines.
+  # nginx:
+  #   image: nginx
+  #   links:
+  #     - api
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/conf.d/funkwhale.conf:ro
+  #     - ./funkwhale_proxy.conf:/etc/nginx/funkwhale_proxy.conf:ro
+  #     - ./data/media:/srv/funkwhale/data/media:ro
+  #     - ./front/dist:/srv/funkwhale/front/dist:ro
+  #     - ./data/static:/srv/funkwhale/data/static/:ro
+  #   ports:
+  #     - "127.0.0.1:5001:80"

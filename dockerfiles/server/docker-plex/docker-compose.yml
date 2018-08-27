@@ -18,7 +18,7 @@ services:
       - /nas:/nas
 
     environment:
-      - TZ=Australia/Brisbane
+      - TZ=UTC
       - PLEX_UID=0
       - PLEX_GID=0
       # Update to match your network address

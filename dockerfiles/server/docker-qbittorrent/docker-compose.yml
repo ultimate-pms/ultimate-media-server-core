@@ -19,7 +19,7 @@ services:
       - /nas:/nas
 
     environment:
-      - TZ=Australia/Brisbane
+      - TZ=UTC
       - WEBUI_PORT=8080
       - PUID=0
       - PGID=0

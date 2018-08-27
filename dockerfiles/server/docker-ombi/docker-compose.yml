@@ -14,4 +14,4 @@ services:
       - /opt/docker-ombi/config:/config
 
     environment:
-      - TZ=Australia/Brisbane
+      - TZ=UTC

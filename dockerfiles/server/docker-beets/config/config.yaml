@@ -1,0 +1,158 @@
+plugins: copyartifacts lyrics fetchart embedart importadded convert fuzzy ftintitle scrub replaygain lastgenre chroma web duplicates acousticbrainz badfiles fromfilename fuzzy
+
+directory: /music
+library: /config/musiclibrary.blb
+art_filename: albumart
+threaded: yes
+original_date: yes
+per_disc_numbering: no
+
+convert:
+  auto: yes
+#    no_convert:
+#      - format:AAC
+#      - format:FLAC
+  quiet: true
+  format: mp3
+  ffmpeg: /usr/bin/ffmpeg
+  opts: -ab 320k -ac 2 -ar 48000
+  max_bitrate: 320
+  threads: 4
+  copy_album_art: yes
+
+paths:
+  default: $albumartist/$album ($year)%aunique{}/$albumartist - $album - $track - $title
+  singleton: Non-Album/$artist - $title
+  comp: Compilations/$album%aunique{}/$albumartist - $album - $track - $title
+  albumtype_soundtrack: Soundtracks/$album/$albumartist - $album - $track - $title
+
+zero:
+  fields: comments
+  comments:
+  - EAC
+  - LAME
+  - from.+collection
+  - ripped by
+  update_database: yes
+  auto: yes
+  keep_fields: []
+
+#   keep_fields: title artist track album disc date genre album_artist art TBPM lyrics-XXX R128_ALBUM_GAIN R128_TRACK_GAIN
+
+duplicates:
+  merge: yes
+
+badfiles:
+  auto: yes
+
+lyrics:
+  auto: yes
+  fallback: ''
+  google_API_key: ''
+
+import:
+  write: yes
+#    copy: no
+  move: yes
+  resume: ask
+  incremental: yes
+  quiet_fallback: skip
+  timid: no
+  log: /config/beet.log
+
+musicbrainz:
+  ratelimit: 5
+  searchlimit: 20
+  user: ''
+  pass: ''
+
+fuzzy:
+  threshold: 0.7
+  prefix: '~'
+
+sort_item: albumartist+ original_year+ album+ disc+ track+
+
+match:
+  distance_weights:
+    track_index: 0.1
+
+per_disc_numbering: no
+
+sort_album: albumartist+ original_year+ album+
+
+# Moves featured artists to title (should help fix Funkwhale multiple artists bug)
+ftintitle:
+  format: (feat. {0})
+  auto: yes
+  drop: no
+
+lastgenre:
+  fallback: ''
+  canonical: ''
+  source: track
+  count: 4
+  prefer_specific: no
+  force: yes
+  min_weight: 10
+  auto: yes
+  whitelist: yes
+  separator: ', '
+
+embedart:
+  auto: yes
+  maxwidth: 1000
+  compare_threshold: 0
+  ifempty: no
+  remove_art_file: no
+
+fetchart:
+  auto: yes
+  google_key:
+  cover_names: cover front back art album folder
+  fanarttv_key: ''
+  google_key: ''
+  google_engine: 001442825323518660753:hrh5ch1gjzm
+  cautious: no
+  maxwidth: 0
+  minwidth: 500
+  sources: filesystem fanarttv coverart itunes amazon albumart wikipedia google
+  store_source: yes
+  enforce_ratio: no
+
+acousticbrainz:
+  auto: yes
+  force: yes
+
+replaygain:
+  auto: no
+  noclip: yes
+  overwrite: yes
+
+chroma:
+  auto: yes
+
+scrub:
+  auto: yes
+
+fromfilename:
+  auto: yes
+
+importadded:
+  preserve_write_mtimes: no
+  preserve_mtimes: no
+
+replace:
+  '^\.': _
+  '[\x00-\x1f]': _
+  '[<>:"\?\*\|]': _
+  '[\xE8-\xEB]': e
+  '[\xEC-\xEF]': i
+  '[\xE2-\xE6]': a
+  '[\xF2-\xF6]': o
+  '[\xF8]': o
+  '\.$': _
+  '\s+$': ''
+
+web:
+  host: 0.0.0.0
+  port: 8337

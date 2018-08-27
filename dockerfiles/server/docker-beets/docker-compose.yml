@@ -1,21 +1,20 @@
 version: '2'
-# Docker Lidarr Music Downloader Compose File
+# Beets Music Organizer
 
 services:
-  lidarr:
+  beets:
 
-    image: linuxserver/lidarr
-    container_name: lidarr
+    #image: linuxserver/beets
+    build: .
+    container_name: beets
     privileged: true
     restart: always
     ports:
-      - 8686:8686
+      - 8337:8337
 
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /opt/docker-lidarr/config:/config
-
-      # Configure any other volmes/shares you want to map in...
+      - ./config:/config
       - /nas:/nas
 
     environment:

@@ -1,22 +1,17 @@
 version: '2'
-# Docker Lidarr Music Downloader Compose File
 
 services:
-  lidarr:
+  webgrabplus:
 
-    image: linuxserver/lidarr
-    container_name: lidarr
+    image: linuxserver/webgrabplus
+    container_name: webgrabplus
     privileged: true
     restart: always
-    ports:
-      - 8686:8686
 
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /opt/docker-lidarr/config:/config
-
-      # Configure any other volmes/shares you want to map in...
-      - /nas:/nas
+      - ./config:/config
+      - ./data:/data
 
     environment:
       - TZ=UTC

@@ -18,6 +18,6 @@ services:
       - "/opt/docker-plex/config/Library/Application Support/Plex Media Server/Logs:/logs:ro"
 
     environment:
-      - TZ=Australia/Brisbane
+      - TZ=UTC
       - PGID=0
       - PUID=0
