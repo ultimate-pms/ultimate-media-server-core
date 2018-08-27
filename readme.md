@@ -46,7 +46,7 @@ So without further mention, let's dive in and get the thing up and running!
 ## 1. Clone Repo:
 
 The project uses Git Submodules, make sure you clone the repo using:
-`git clone --recurse-submodules https://github.com/ultimate-pms/ultimate-plex-setup.git /opt/pms-scripts`
+`git clone --recurse-submodules https://github.com/ultimate-pms/ultimate-media-server-core.git /opt/pms-scripts`
 
 ## 2. Setup services:
 ### 2.1 Install Docker & Docker Compose:
