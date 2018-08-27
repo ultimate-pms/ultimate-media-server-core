@@ -7,10 +7,9 @@ If you're new to this, you should clone down the repo, and start by reading abou
 **@UPDATE:**
 
 ```
-I realise there's a lot here, I'll add some screen-shots and do a proper blog
-write-up on this one day so you can see it all working, for now you'll have to
-take my word If you want to "cut the cord"...
-You're not going to get much better than this!
+There's a lot here, I'll add some screen-shots and do a proper blog write-up on this one day so you
+can see it all working, for now you'll have to take my word If you want to "cut the cord" - You're
+not going to get much better than this!
 ```
 
 --------------------------------------------
