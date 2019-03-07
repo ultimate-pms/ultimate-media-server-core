@@ -17,13 +17,18 @@ TV_CATAGORY="tv"
 
 REMOVE_AFTER_X_HOURS=720 # Suggest at least 24 hours, so that you maintain a reasonable seed ratio... Defaults to 1 month.
 
+# qBitTorrent 4.5.x and newer now needs to use a cookie to access the API...
+COOKIE_TOKEN=`curl \
+    --header "Referer: http://$QBITTORRENT_HOSTNAME" \
+    --data "username=$QBITTORRENT_USERNAME&password=$QBITTORRENT_PASSWORD" \
+    -S -c - "$QBITTORRENT_HOSTNAME/api/v2/auth/login" | grep HttpOnly | awk '{print $6 "=" $7}'`
 
 #########################################################################################################
 #
 ## MOVIE TORRENTS
 # ------------------------------------------------------------------------------------------------------------
 
-COMPLETED_MOVIES=`curl -s "http://$QBITTORRENT_USERNAME:$QBITTORRENT_PASSWORD@$QBITTORRENT_HOSTNAME/query/torrents?filter=completed&category=$MOVIE_CATAGORY"`
+COMPLETED_MOVIES=`curl --cookie "$COOKIE_TOKEN" -s "http://$QBITTORRENT_HOSTNAME/query/torrents?filter=completed&category=$MOVIE_CATAGORY"`
 
 # Radarr client copies the movies, but does not remove the torrent file or the movie file, instead it creates a hardlink so the file can continue to seed...
 # Find any torrents older than X hours (after they have been copied over to the NAS volumes), go ahead and remove the torrents and files (in this case symlinks, your copied files will not be removed)...
@@ -40,7 +45,7 @@ while IFS=$'\t' read -r item hash completion_on; do
 
         echo "Removing: [$item]"
         # Remove from torrent client...
-        curl -s -d "hashes=$hash" -X POST "http://$QBITTORRENT_USERNAME:$QBITTORRENT_PASSWORD@$QBITTORRENT_HOSTNAME/command/delete"
+        curl --cookie "$COOKIE_TOKEN" -s -d "hashes=$hash" -X POST "http://$QBITTORRENT_HOSTNAME/command/delete"
 
         # Remove seed files...
         rm -rf $item
@@ -51,7 +56,7 @@ done
 ## TV TORRENTS
 # ------------------------------------------------------------------------------------------------------------
 
-COMPLETED_TV_SERIES=`curl -s "http://$QBITTORRENT_USERNAME:$QBITTORRENT_PASSWORD@$QBITTORRENT_HOSTNAME/query/torrents?filter=completed&category=$TV_CATAGORY"`
+COMPLETED_TV_SERIES=`curl --cookie "$COOKIE_TOKEN" -s "http://$QBITTORRENT_HOSTNAME/query/torrents?filter=completed&category=$TV_CATAGORY"`
 
 echo $COMPLETED_TV_SERIES | jq -r '.[] | [.save_path + .name, .hash, .completion_on|tostring] | @tsv' |
 while IFS=$'\t' read -r item hash completion_on; do
@@ -66,7 +71,7 @@ while IFS=$'\t' read -r item hash completion_on; do
         echo "Removing: [$item]"
 
         # Remove from torrent client...
-        curl -s -d "hashes=$hash" -X POST "http://$QBITTORRENT_USERNAME:$QBITTORRENT_PASSWORD@$QBITTORRENT_HOSTNAME/command/delete"
+        curl --cookie "$COOKIE_TOKEN" -s -d "hashes=$hash" -X POST "http://$QBITTORRENT_HOSTNAME/command/delete"
 
         # Remove seed files...
         rm -rf $item
