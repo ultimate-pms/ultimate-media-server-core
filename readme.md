@@ -36,6 +36,7 @@ not going to get much better than this!
 - [Beets](http://beets.io/) - This is an essential tool for managing your MP3 library / cleaning up ID3 tags, pulling in Cover Art & Lyrics etc...
 - [tvhProxy](https://github.com/jkaberg/tvhProxy) - This is how you can seamlessly connect TvHeadend into Plex
 - [WebGrab+Plus](http://www.webgrabplus.com/) - This is how you pull in all the EPG (TV Guides) from various sites to Plex without having to use a paid metadata TV Guide service...
+- [piHole](https://pi-hole.net/) - Better ad blocking for my home network / finally no Youtube ads!
 
 So without further mention, let's dive in and get the thing up and running!
 (Docker-compose files are based upon the components mentioned above)

@@ -1,0 +1,44 @@
+version: "3"
+services:
+  pihole:
+
+    image: diginc/pi-hole
+    container_name: pihole
+    restart: always
+
+    cap_add:
+      - ALL
+
+    ports:
+      - 8888:8888
+      - 55:53/udp
+      - 55:53/tcp
+
+    # DNS is mapped internally from plex-connect proxy
+    #  - "${HOST_IP}:53:53/udp"
+    #  - "${HOST_IP}:80:80/tcp"
+
+    environment:
+      ServerIP: 127.0.0.1 # Change this to the IP of your docker host
+      WEBPASSWORD: admin
+      WEB_PORT: 8888
+
+      DNS1: 1.1.1.1
+      DNS2: 8.8.8.8
+
+    # Add your own custom hostnames you need for your domain
+    extra_hosts:
+      - "pihole.gquad.space:127.0.0.1" # Change 127.0.0.1 to the IP of your docker host
+
+    volumes:
+      - "./pihole/:/etc/pihole/"
+      - "./dnsmasq.d/:/etc/dnsmasq.d/"
+      - "./log:/var/log"
+
+    restart: always
+    networks:
+      - pihole
+
+networks:
+  pihole:
+    external: true
