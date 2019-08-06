@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
   tvheadend:
@@ -18,3 +18,9 @@ services:
     environment:
       - PGID=0
       - PUID=0
+
+    healthcheck:
+      test: curl --fail -s http://localhost:9981/ || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3

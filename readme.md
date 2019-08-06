@@ -1,16 +1,27 @@
 # The Ultimate Media Server Setup!
-This repo is a work-in-progress... If you have any additions, please feel free to submit a PR!
+This repo is a constant work-in-progress... If you have any additions, please submit your Pull Requests!
 
 The aim of this project, is to build your perfect media server setup with end-to-end automation in an evening, not weeks - I'll be updating this repo as my own setup evolves, but for now here's a "dump" to help you get the perfect PMS setup!
 If you're new to this, you should clone down the repo, and start by reading about all the various services that are listed, and then standing up all the services within Docker - one by one - __This is the easiest way to get running__...
 
-**@UPDATE:**
+**@UPDATES:**
 
 ```
-There's a lot here, I'll add some screen-shots and do a proper blog write-up on this one day so you
+Aug 2019:
+- Added in Health Checking support of key containers, and automatic subtitle downloading support..
+
+Mar 2019:
+- I've added in the ability to run multiple Plex transcoders (in multiple Docker containers that you
+can split the transcoding process over multiple hosts) if your Plex server has a lot of users.
+
+Dec 2018:
+- There's a lot here, I'll add some screen-shots and do a proper blog write-up on this one day so you
 can see it all working, for now you'll have to take my word If you want to "cut the cord" - You're
 not going to get much better than this!
+
 ```
+
+The setup of Plex Transcoding over multiple servers is a little complex, so it's worth reading: [here](https://github.com/ultimate-pms/UnicornLoadBalancer), [here](https://github.com/ultimate-pms/UnicornFFMPEG), and [here](https://github.com/ultimate-pms/UnicornTranscoder) for details, and then going through the [`docker-compose`](dockerfiles/server/docker-plex/docker-compose.yml) file for Plex. **Note, you can still use the old Plex docker-compose file _(read below)_ if you do not want to have multiple transcoding servers**.
 
 --------------------------------------------
 
@@ -25,6 +36,7 @@ not going to get much better than this!
 - [Sonarr](https://sonarr.tv/) - Automatically grabs your favourite TV shows, sends them to your download client & organises the files.
 - [Radarr](https://radarr.video/) - A fork of Sonarr, but for Movies.
 - [Lidarr](https://lidarr.audio/) - A fork of Sonarr, but for all your favorite music - Great for pulling in AAC/FLAC tracks that you can't get on Spotify if you're an Audiophile.
+- [Bazarr](https://www.bazarr.media/) - Bazarr is a companion application to Sonarr and Radarr that manages and downloads subtitles.
 - [Jackett](https://github.com/Jackett/Jackett) - API integration of all of the most popular Torrent Trackers for Sonarr/Radarr.
 - [qBittorrent](https://www.qbittorrent.org/)  - Reliable, lightweight linux torrent client
 
@@ -37,6 +49,7 @@ not going to get much better than this!
 - [tvhProxy](https://github.com/jkaberg/tvhProxy) - This is how you can seamlessly connect TvHeadend into Plex
 - [WebGrab+Plus](http://www.webgrabplus.com/) - This is how you pull in all the EPG (TV Guides) from various sites to Plex without having to use a paid metadata TV Guide service...
 - [piHole](https://pi-hole.net/) - Better ad blocking for my home network / finally no Youtube ads!
+- [Docker Autoheal](https://github.com/willfarrell/docker-autoheal) - A lightweight container, designed to monitor the health of other containers & restart them if they have crashed.
 
 So without further mention, let's dive in and get the thing up and running!
 (Docker-compose files are based upon the components mentioned above)
@@ -58,7 +71,8 @@ For Docker-compose: https://docs.docker.com/compose/install/
 
 **NOTE:** Before running this, you should configure each docker-compose file accordingly!
 By default everything will mount to a volume called `/nas` which should be a network s hare to your NAS/External Drive(s)...
-Docker compose files are located in the `dockerfiles/server` directory.
+
+Docker compose files are located in the `dockerfiles/server` directory, and have comments explaining various variables etc.
 
 ```
 # Copy compose files into /opt
@@ -69,23 +83,47 @@ find /opt/ -maxdepth 1 -name "docker*" -type d \( ! -wholename /opt/ \) -exec ba
 
 ```
 
+*NOTE*:
+
+- The Plex docker files can be split into 4 containers with the UnicornTranscoder for Plex project, which allows you to transcode on multiple servers (if you have a lot of traffic). Please read the docker-compose file for details.
+**By default, Plex will be stood up in a single container.**
+
+   - If you want to use this setup, just run: `docker-compose up -d --compose-file docker-compose_multi-transcoder.yml` from the `server/docker-plex` directory.
+
+  - If you're going to run multiple transcoders (on other hosts), you just need to run the `plex-transcoder-1` part of the Plex docker-compose.yml file, not all the other containers... 
+
+- Don't forget to manually configure Plex in the web/ui once it's running & setup a reverse proxy using something like [Caddy](https://hub.docker.com/r/bushrangers/alpine-caddy) (with automatic HTTPS/lets Encrypt).
+
+ 
+- **Don't forget to update the**`<IP-OF-HOST-OR-DNS-FQDN-OF-HOST>` **_(in your docker-compose.yml files)_ to the actual local IP of your server and/or a DNS name if you're putting a reverse proxy (Caddy/Nginx) in front of it.**
+
 ## 3. Configure!
 
 You'll now need to go and configure each service - there's various howto's on the Internet already, when I've got time I'll do a write up.
 
-Useful URLs:
+### Useful URLs:
 
- - Jackett - `http://<server-ip>:9117/UI/Dashboard` - Start here, configure your torrent indexers to start...
- - qBittorrent - `http://<server-ip>:8080/` - This is your torrent client, you will ned to configure save-file location, password etc...
- - tvHeadend - `http://<server-ip>:9981/` - You'll need to configure tvHeadend with your favorite IPTV feeds if you want to use the Plex DVR Feature
- - Tautulli - `http://<server-ip>:8181/home` - Analytics about who's watching what media on your network
+**Download Management:**
+
+ - Jackett - `http://<server-ip>:9117/UI/Dashboard` - Start here, configure your torrent indexers to start
+ - qBittorrent - `http://<server-ip>:8080/` - This is your torrent client, you will ned to configure save-file location, password etc
  - Sonarr - `http://<server-ip>:8988/` - Configure, then add in all your favorite TV series you want to start auto-downloading
  - Radarr `http://<server-ip>:7878/` - Configure Movies you want to start auto-downloading
- - Lidarr `http://<server-ip>:8686/` - Configure for any Music you want to start auto-downloading...
+ - Lidarr `http://<server-ip>:8686/` - Configure for any Music you want to start auto-downloading
+ - Bazarr `http://<server-ip>:6767/` - Setup your automatic subtitle downloading
+
+
+**Media Server:**
+
  - Plex - `http://<server-ip>:22500/` - **Access Your Plex Media Server!** (via Nginx proxy injecting TVHeadend CSS Fixes) - You should be port-forwarding to this one and sharing with your friends.
+ - Funkwhale - `http://<server-ip>:8881/` - This is the front-end for Funkwhale if you are using: [funkwhale-nginx-proxy](https://github.com/ultimate-pms/funkwhale-nginx-proxy)
+ - tvHeadend - `http://<server-ip>:9981/` - You'll need to configure tvHeadend with your favorite IPTV feeds if you want to use the Plex DVR Feature
+
+**Analytics & Supporting Tools:**
+
+ - Tautulli - `http://<server-ip>:8181/home` - Analytics about who's watching what media on your network
  - OpenSpeedtest - `http://<server-ip>:8081/` - Worth setting up port-forwarding to this, it will allow you to test the download speed (of you internet connection) when accessing your server remotely.
  - Ombi - `http://<server-ip>:3579/` - Worth setting up port-forwarding to this one also - It will allow your friends and family to "request" new Series, Movies etc to be added to your server (This way they don't need access to Radarr/Sonarr/Lidarr)
- - Funkwhale - `http://<server-ip>:8881/` - This is the front-end for Funkwhale if you are using: [funkwhale-nginx-proxy](https://github.com/ultimate-pms/funkwhale-nginx-proxy)
 
 
 ## 4. Additional Automation & Maintenance Scripts

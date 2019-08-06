@@ -1,0 +1,14 @@
+version: '2'
+services:
+  autoheal:
+
+    restart: always
+    image: willfarrell/autoheal
+    privileged: true
+    container_name: autoheal
+
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

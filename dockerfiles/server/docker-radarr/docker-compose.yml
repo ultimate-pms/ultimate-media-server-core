@@ -1,11 +1,11 @@
-version: '2'
+version: '3'
 # Docker Radarr Compose File
 
 services:
   radarr:
 
-    #image: linuxserver/radarr
-    build: .
+    image: linuxserver/radarr
+    #build: .
 
     container_name: radarr
     privileged: true
@@ -29,5 +29,8 @@ services:
       - PGID=0
       - PUID=0
 
-    # See: https://docs.docker.com/engine/reference/run/#cpu-share-constraint
-    cpu_shares: 256
+    healthcheck:
+      test: curl --fail -s http://localhost:7878/ || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3

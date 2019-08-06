@@ -1,0 +1,200 @@
+version: '3'
+# Docker Plex Media Server Configuration File (with multiple docker containers for transcoding)
+#
+# There's various comments through this file, however the only things you should need to change to get going with minimal config is:
+#    - <IP-OF-HOST-OR-DNS-FQDN-OF-HOST> (should become the actual external IP OR DNS Name of your server running the plex transcoder(s))
+#    - /nas & /nas2 should be changed to real volumes where your media is.
+
+services:
+  plex:
+
+    build:
+      context: ./plex-core
+      dockerfile: Dockerfile
+
+    container_name: plex
+    privileged: true
+    restart: always
+
+    networks:
+      - pms-core
+
+    volumes:
+      # Bring in the 'plexmediaserver' files and share them to the plex-transcoder-lb
+      - plex-core-files:/usr/lib/plexmediaserver/
+      - ./config:/config
+
+      # Optional directory where you want to store your transcoded files (this should be a SSD)
+      - ./transcode-tmp:/transcode
+
+      # Map in the volume(s) where your media resides below...
+      - /nas:/nas
+      - /nas2:/nas2
+
+    environment:
+      - TZ=Australia/Brisbane
+      - PLEX_UID=0
+      - PLEX_GID=0
+
+      # Note the 172 range is required (it's the internal docker network range) for the LB to talk to Plex - the 10.x and 192.x ranges can be removed if you don't want to permit unauthenticated access to your plex (ON YOUR LAN) only.
+      - ALLOWED_NETWORKS=172.16.0.0/12,10.0.0.0/8,192.168.0.0/16
+      - CHANGE_CONFIG_DIR_OWNERSHIP=false
+      - DEBUG=false
+
+      # Additional environment variable for Plex-transcoding load-balancer
+      - LB_URL=http://plex-transcoder-lb:3001/
+
+    ports:
+      # Note that the main Plex TCP port (32400) IS NOT exposed here (only the UDP port) - it's exposed via the Plex Load Balancer (below) instead!
+      - 32400:32400/udp
+
+      # Plex Home Theater via Plex Companion
+      - 3005:3005
+
+      # For older Bonjour/Avahi network discovery (Uncomment if you don't have a Avahi service already running on your host)
+      # - 5353:5353
+      # - 5353:5353/udp
+
+      # For controlling Plex for Roku via Plex Companion
+      - 8324:8324
+
+      # For access to the Plex DLNA Server
+      # Uncomment for DLNA Support
+      # - 32469:32469
+      # - 32469:32469/udp
+      # - 1900:1900
+      # - 1900:1900/udp
+
+      # For current GDM network discovery
+      - 32410:32410
+      - 32410:32410/udp
+      - 32412:32412
+      - 32412:32412/udp
+      - 32413:32413
+      - 32413:32413/udp
+      - 32414:32414
+      - 32414:32414/udp
+
+    # See: https://docs.docker.com/compose/compose-file/#resources
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+
+  plex-transcoder-lb:
+
+    build:
+      context: ./plex-transcoder-lb
+      dockerfile: Dockerfile
+
+    container_name: plex-transcoder-lb
+    privileged: true
+    restart: always
+
+    volumes:
+      - plex-core-files:/usr/lib/plexmediaserver/
+      - ./config:/config
+
+    networks:
+      - pms-core
+
+    environment:
+      # Service configuration:
+      - SERVER_PORT=3001
+      - SERVER_HOST=127.0.0.1
+      - SERVER_PUBLIC=http://plex-transcoder-lb:3001/
+
+      # Plex service configuration/discovery
+      - PLEX_HOST=plex
+      - PLEX_PORT=32400
+      - PLEX_PATH_USR=/usr/lib/plexmediaserver/
+
+      # The path where Plex store sessions (to grab external subtitles) 
+      - "PLEX_PATH_SESSIONS=/config/Library/Application Support/Plex Media Server/Cache/Transcode/Sessions"
+
+      - DATABASE_MODE=sqlite
+      - "DATABASE_SQLITE_PATH=/config/Library/Application Support/Plex Media Server/Plug-in Support/Databases/com.plexapp.plugins.library.db"
+
+      - REDIS_HOST=plex-redis
+      - REDIS_PORT=6379
+
+      # How long (in seconds) before we remove a "transcode server" from the load balancer if it's offline...
+      - CUSTOM_SCORES_TIMEOUT=20
+
+      # Comma separated list of Plex Transcoders...
+      - "CUSTOM_SERVERS_LIST=[http://<IP-OF-HOST-OR-DNS-FQDN-OF-HOST>:65520/]"
+
+      # Uncomment to allow debugging (if you're having issues)
+      - DEBUG=*
+
+    ports:
+      - 32400:3001
+
+  # Redis is used for the plex transcoder load balancer
+  plex-redis:
+    image: redis:5-alpine
+    container_name: plex-redis
+    restart: always
+
+    networks:
+      - pms-core
+
+  # The main plex 'transcoder' service .
+  # We can have multiple copies of this on other hosts, to scale out the transcode process).
+  plex-transcoder-1:
+
+    build:
+      context: ./plex-transcoder
+      dockerfile: Dockerfile
+
+    container_name: plex-transcoder-1
+    restart: always
+
+    networks:
+      - pms-core
+
+    # Please read: https://github.com/ultimate-pms/UnicornTranscoder if you want to scale this out to other hosts...
+    environment:
+      # Service configuration:
+      - LOADBALANCER_ADDRESS=http://plex-transcoder-lb:3001
+      - INSTANCE_ADDRESS=http://<IP-OF-HOST-OR-DNS-FQDN-OF-HOST>:65520
+      - SERVER_LISTEN=0.0.0.0
+
+      # These variables are used to automatically download the transcoder from plex - it needs to match the same version as whatever the main 'plex' container is running
+      - PLEX_ARCH=linux-ubuntu-x86_64
+
+      # Build should match whatever the tag is in our plex-core/Dockerfile
+      - PLEX_BUILD=1.14.1.5488-cc260c476
+      - CODECS_BUILD=531e313-1328
+      - EAE_VERSION=141
+
+      # Performance tuning (for this transcoder - Note if maxed out, other transcoders in the load balancer will get the traffic...)
+      - MAX_SESSIONS=20
+      - MAX_DOWNLOADS=10
+      - MAX_TRANSCODE=10
+
+      # If a session isn't requested for this amount of time (in second) the session will be deleted and transcoded files deleted.
+      - TRANSCODER_DECAY_TIME=120
+      # Send statistics about this worker's load every X seconds... (should be less than the load balancer's CUSTOM_SCORES_TIMEOUT variable)
+      - PING_FREQUENCY=10
+
+      # Uncomment to allow debugging (if you're having issues)
+      - DEBUG=*
+
+    ports:
+      - 65520:3000
+
+    volumes:
+      # This directory will need to be created before the service will start - If starting plex for the first time, it may take 30-60 secs while plex bootstraps for the first time...
+      - "./config/Library/Application Support/Plex Media Server/Codecs:/opt/UnicornTranscoder/codecs"
+      - plex-core-files:/usr/lib/plexmediaserver/
+
+    command: >
+      bash -c "mkdir -p /opt/UnicornTranscoder/plexmediaserver/$PLEX_BUILD/usr/lib/ &&
+        ln -s /opt/UnicornTranscoder/plexmediaserver/$PLEX_BUILD/usr/lib/plexmediaserver /usr/lib/plexmediaserver"
+
+networks:
+  pms-core:
+
+volumes:
+  plex-core-files:

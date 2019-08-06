@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 # Docker Lidarr Music Downloader Compose File
 
 services:
@@ -23,5 +23,8 @@ services:
       - PGID=0
       - PUID=0
 
-    # See: https://docs.docker.com/engine/reference/run/#cpu-share-constraint
-    cpu_shares: 512
+    healthcheck:
+      test: curl --fail -s http://localhost:8686/ || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3

@@ -3,16 +3,19 @@ version: '2'
 services:
   tvhproxy:
 
-    image: jkaberg/tvhproxy
-    container_name: tvhproxy
+    image: thejf/antennas
+    container_name: tvheadend-proxy
     privileged: true
     restart: always
+    # network_mode: bridge
     ports:
-      - 5005:5004
+      - 5004:5004
 
     volumes:
       - /etc/localtime:/etc/localtime:ro
 
     environment:
-      # Update to the IP of your tvHeadend Server...
-      - TVH_URL=http://127.0.0.1:9981/
+      # - TVH_URL=http://<DOCKER-HOST-IP>:9981
+      # - TUNER_COUNT=2
+      # - TVHEADEND_URL=http://<username>:<password>@<DOCKER-HOST-IP>:9981
+      # - ANTENNAS_URL=http://<DOCKER-HOST-IP>:5004

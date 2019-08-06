@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
   jackett:
@@ -16,3 +16,9 @@ services:
 
      # Configure to point to your mapped "blackhole" directory
       - /nzbget-downloads/jackett-blackhole:/downloads
+
+    healthcheck:
+      test: curl --fail -s http://localhost:9117/ || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3

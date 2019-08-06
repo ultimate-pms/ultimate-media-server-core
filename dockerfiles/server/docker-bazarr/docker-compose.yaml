@@ -1,21 +1,22 @@
 version: '3'
-# Docker Sonarr Compose File
+# Docker Bazarr Compose File
 
 services:
-  sonarr:
+  bazarr:
 
-    image: linuxserver/sonarr
-    container_name: sonarr
+    image: linuxserver/bazarr
+
+    container_name: bazarr
     privileged: true
     restart: always
     ports:
-      - 8988:8989
+      - 6767:6767
 
     volumes:
+      - /opt/docker-bazarr/config:/config
       - /etc/localtime:/etc/localtime:ro
-      - /opt/docker-sonarr/config:/config
 
-      # Map in your Media Shares & Download Client's Share(s)...
+      # Map in your Media Shares Below...
       - /nas:/nas
 
     environment:
@@ -24,7 +25,7 @@ services:
       - PUID=0
 
     healthcheck:
-      test: curl --fail -s http://localhost:8988/ || exit 1
+      test: curl --fail -s http://localhost:6767/ || exit 1
       interval: 30s
       timeout: 10s
       retries: 3
