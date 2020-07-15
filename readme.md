@@ -7,6 +7,9 @@ If you're new to this, you should clone down the repo, and start by reading abou
 **@UPDATES:**
 
 ```
+July 2020:
+- Include Radarr script to move primary directory of a radarr movie (useful if you change your drive/nas structure/layout)'
+
 Aug 2019:
 - Added in Health Checking support of key containers, and automatic subtitle downloading support..
 
@@ -132,6 +135,7 @@ You'll now need to go and configure each service - there's various howto's on th
 
 | Script                                                                               | Language    | Targets          | Description                                                                                                                                                                                                                                  |
 | ------------------------------------------------------------------------------------ | ----------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [radarr_move_primary_directory.sh](scripts/radarr/radarr_move_primary_directory.sh)         | Bash        | Radarr (API)     | A script to move the primary directory of a radarr movie (useful if you change your drive/nas structure/layout)
 | [radarr_rename-movie-files.sh](scripts/radarr/radarr_rename-movie-files.sh)                 | Bash        | Radarr (API)     | Quick and dirty script to hit the Radarr API and rename any movies (via the Radar API) so that they are correctly indexed in Plex
 | [radarr_search-missing-movies.sh](scripts/radarr/radarr_search-missing-movies.sh)           | Bash        | Radarr (API)     | Script that hits the Radarr API to search for any missing movies (Ideally this should be scheduled with your CRON and run each night)
 | [radarr_search-missing-movies-by-year](scripts/radarr/radarr_search-missing-movies-by-year.sh) | Bash     | Radarr (API)     | Same as previous script, but only searches missing movies that match a specific year (i.e. Only search missing movies from 2016)
@@ -150,7 +154,7 @@ You'll now need to go and configure each service - there's various howto's on th
 
 Here's a copy of my current cron jobs -- update paths accordingly:
 
-```
+```bash
 ############## GENERAL DOWNLOAD/CLEANUP AUTOMATION ##############
 
 # Remove any old, un-downloaded movies before triggering search-all...
